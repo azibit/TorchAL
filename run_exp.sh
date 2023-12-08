@@ -6,7 +6,7 @@ export PYTHONFAULTHANDLER=1
 pythonExec=$1
 
 # Go to the folder you want to run your programs in
-cd /raid/shadab/prateek/cvpr_code
+# cd ./cvpr_code
 
 # # # # # # #Possible sampling functions
 # # # # # # ## random, uncertainty, uncertainty_uniform_discretize, dbal \
@@ -14,11 +14,11 @@ cd /raid/shadab/prateek/cvpr_code
 # # # # # # ## ensemble_var_R, core_gcn
 
 # script params
-port=5035
+port=5036
 sampling_fn=dbal
 lSet_partition=1
 base_seed=1
-num_GPU=2
+num_GPU=1
 al_iterations=4 #7 #4
 num_aml_trials=3 #50
 budget_size=5000 #2500
@@ -35,17 +35,17 @@ swa_epochs=5 #50
 log_iter=40
 
 #Data arguments
-train_dir=/raid/shadab/prateek/cvpr_code/data/$dataset/train-$dataset/
-test_dir=/raid/shadab/prateek/cvpr_code/data/$dataset/test-$dataset/
-lSetPath=/raid/shadab/prateek/cvpr_code/data/$dataset/partition_$lSet_partition/lSet_$dataset.npy
-uSetPath=/raid/shadab/prateek/cvpr_code/data/$dataset/partition_$lSet_partition/uSet_$dataset.npy
-valSetPath=/raid/shadab/prateek/cvpr_code/data/$dataset/partition_$lSet_partition/valSet_$dataset.npy
+train_dir=./cvpr_code/data/$dataset/train-$dataset/
+test_dir=./cvpr_code/data/$dataset/test-$dataset/
+lSetPath=./cvpr_code/data/$dataset/partition_$lSet_partition/lSet_$dataset.npy
+uSetPath=./cvpr_code/data/$dataset/partition_$lSet_partition/uSet_$dataset.npy
+valSetPath=./cvpr_code/data/$dataset/partition_$lSet_partition/valSet_$dataset.npy
 
 #for lSet 1
-out_dir=/raid/shadab/prateek/cvpr_code/temp_results 
+out_dir=./cvpr_code/temp_results 
 
 # for other lSet Exps
-# out_dir=/raid/shadab/prateek/cvpr_code/results_lSetPartitions
+# out_dir=./cvpr_code/results_lSetPartitions
 
 #model_types: (i) wide_resnet_50 (ii) wide_resnet_28_10 (iii) wide_resnet_28_2
 
@@ -58,13 +58,13 @@ model_depth=16 #26
 # model_depth=18 #16 #26
 
 # For resnet
-# model_cfg_file=/raid/shadab/prateek/cvpr_code/configs/$dataset/$model_style/$model_type/R-18_4gpu.yaml
+# model_cfg_file=./cvpr_code/configs/$dataset/$model_style/$model_type/R-18_4gpu.yaml
 
 date # So we know when we started
 
 export CUDA_VISIBLE_DEVICES=0,1
 
-$pythonExec tools/main_aml.py --n_GPU $num_GPU \
+python3 ./tools/main_aml.py --n_GPU $num_GPU \
 --port $port --sampling_fn $sampling_fn --lSet_partition $lSet_partition \
 --seed_id $base_seed \
 --init_partition $init_partition --step_partition $step_partition \

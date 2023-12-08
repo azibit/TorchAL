@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/azeez/Documents/TorchAL')
+
 import torch
 import torch.nn as nn
 
@@ -17,6 +20,7 @@ from al_utils.data import Data as custom_Data
 from pycls.core.model_builder import build_model
 from tqdm import tqdm
 import numpy as np
+from torch.optim.swa_utils import AveragedModel, SWALR
 
 
 def get_optimizer_model(
@@ -67,18 +71,21 @@ def get_optimizer_model(
 
 
 def swa_train(cfg, args, optimizer, model, lSetLoader, bn_lSetLoader, valSetLoader):
+    # Updated code with help from - https://pytorch.org/blog/pytorch-1.6-now-includes-stochastic-weight-averaging/
+    print("Calling swa_train ...")
     """Function implementing SWA postraining."""
     current_id = torch.cuda.current_device()
 
     print(
         f"SWA config- start={cfg.SWA_MODE.START_ITER}, freq={cfg.SWA_MODE.FREQ}, swa_lr={cfg.SWA_MODE.LR}"
     )
-    swa_optimizer = torchcontrib.optim.SWA(
+    swa_optimizer = SWALR(
         optimizer,
-        swa_start=cfg.SWA_MODE.START_ITER,
-        swa_freq=cfg.SWA_MODE.FREQ,
+        # swa_start=cfg.SWA_MODE.START_ITER,
+        # swa_freq=cfg.SWA_MODE.FREQ,
         swa_lr=cfg.SWA_MODE.LR,
     )
+    swa_model = AveragedModel(model)
     print(f"SWA Optimizer: {swa_optimizer}")
 
     print("Training SWA for {} epochs.".format(args.swa_epochs))
@@ -95,12 +102,14 @@ def swa_train(cfg, args, optimizer, model, lSetLoader, bn_lSetLoader, valSetLoad
         for x, y in lSetLoader:
             x = x.cuda(current_id)
             y = y.cuda(current_id)
+            optimizer.zero_grad()
 
             output = model(x)
-
             error = loss(output, y)
+            optimizer.step()
 
-            swa_optimizer.zero_grad()
+            # swa_optimizer.zero_grad()
+            
             error.backward()
             swa_optimizer.step()
 
@@ -109,12 +118,15 @@ def swa_train(cfg, args, optimizer, model, lSetLoader, bn_lSetLoader, valSetLoad
         # print("Epoch {} Done!! Train Loss: {}".format(epoch, error.item()))
 
     print("Averaging weights -- SWA")
-    swa_optimizer.swap_swa_sgd()
+    # swa_optimizer.swap_swa_sgd()
+    swa_model.update_parameters(model)
     print("Done!!")
 
     print("Updating BN")
 
-    swa_optimizer.bn_update(loader=lSetLoader, model=model)
+    # swa_optimizer.bn_update(loader=lSetLoader, model=model)
+    # Update bn statistics for the swa_model at the end
+    torch.optim.swa_utils.update_bn(lSetLoader, swa_model)
     print("Done!!")
 
     # Check val accuracy
@@ -192,6 +204,7 @@ def get_validation_accuracy(valSetLoader, model, current_id):
 
 
 def run_swa_on_trial(trial_path, cfg, args):
+    print("Calling run_swa_on_trial ...")
     """Runs SWA post-training on given trial"""
     print(f"--- Working on {trial_path} ---")
     cfg_file_path = os.path.join(trial_path, "config.yaml")

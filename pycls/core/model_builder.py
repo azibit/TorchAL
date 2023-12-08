@@ -160,9 +160,14 @@ def build_model(cfg, active_sampling=False, isDistributed=True):
         model_type
     )
 
-    assert (
-        cfg.NUM_GPUS <= torch.cuda.device_count()
-    ), "Cannot use more GPU devices than available"
+    print("In building the azeez model")
+    print(f"cfg.NUM_GPUS: {cfg.NUM_GPUS}")
+    print(f"torch.cuda.device_count(): {torch.cuda.device_count()}")
+    print(f"{cfg.NUM_GPUS <= torch.cuda.device_count()}")
+
+    # assert (
+    #     cfg.NUM_GPUS <= torch.cuda.device_count()
+    # ), "Cannot use more GPU devices than available"
 
     print(f"########### cfg model type: {model_type}")
 

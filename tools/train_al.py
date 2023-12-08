@@ -312,6 +312,7 @@ def train_model(
     trial,
     isPruning,
 ):
+    print("Calling train_model ... ")
     """Trains the model."""
 
     global plot_epoch_xvalues
@@ -686,6 +687,7 @@ def train_model(
 def single_proc_train(
     val_acc, val_epoch, trainDataset, valDataset, dataObj, cfg, trial, isPruning
 ):
+    print("Calling single_proc_train ... ")
     """Performs single process training."""
 
     # Setup logging

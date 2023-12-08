@@ -38,7 +38,8 @@ def topks_correct(preds, labels, ks):
         ]
     else:
         topks_correct = [
-            top_max_k_correct[:k, :].view(-1).float().sum() for k in ks
+            # top_max_k_correct[:k, :].view(-1).float().sum() for k in ks
+            top_max_k_correct[:k, :].reshape(-1).float().sum() for k in ks
         ]
     return topks_correct
 

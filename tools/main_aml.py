@@ -7,6 +7,16 @@
 
 import torch
 import torch.nn as nn
+
+print(f"The number of GPUs are: {torch.cuda.device_count()}")
+import sys
+from pathlib import Path
+import sys
+sys.path.append('/home/azeez/Documents/TorchAL')
+# sys.path.insert(0, str(Path(__file__).parent))
+
+# import .pycls as pycls
+
 from pycls.core.config import cfg
 from pycls.core.config import custom_dump_cfg
 from automl_args import args
@@ -17,6 +27,8 @@ from helper.subprocess_utils import (
     swa_on_auto_ml_sp,
     test_net_subprocess_call,
 )
+
+
 
 from copy import deepcopy
 import os

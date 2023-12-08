@@ -129,7 +129,9 @@ def search_best_model_path(temp_path: str, isDirectPath: bool = False):
         all_model_paths = all_model_paths + temp_model_paths
 
     model_names = [os.path.split(i)[1] for i in all_model_paths]
+    print(f"Model Name: {model_names}")
     val_acc = np.array([m.split("_")[2] for m in model_names], dtype=float)
+    print(f"Val Accuracy: {val_acc}")
     best_val_acc_idx = np.argsort(val_acc)[-1]  # -1 to get index for max
     best_model_path = all_model_paths[best_val_acc_idx]
 

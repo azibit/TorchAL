@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/azeez/Documents/TorchAL')
+
 import torch
 import torchvision
 import pickle
@@ -33,6 +36,7 @@ logger = lu.get_logger(__name__)
 
 
 def al_main(cfg, args, trainDataset, valDataset, dataObj, trial, isPruning):
+    print("Calling al_main ...")
     """Main function to facilitate AL settings."""
 
     custom_assert_cfg(cfg)
@@ -258,6 +262,7 @@ def objective(trial, cfg, args, out_dir_path, isPruning):
 
 
 def run_auto_ml(cfg, args):
+    print("Call run_auto_ml ...")
     """This function implements AutoML search.
 
     Args:
@@ -297,8 +302,8 @@ def run_auto_ml(cfg, args):
     # hparams_importances = optuna.importance.get_param_importances(study)
 
     complete_trials = [
-        t for t in study.trials if t.state == optuna.structs.TrialState.COMPLETE
-    ]
+        t for t in study.trials if t.state == optuna.trial.TrialState.COMPLETE
+        ]
     print("Study statistics: ")
     print("  Number of finished trials: ", len(study.trials))
     print("  Number of complete trials: ", len(complete_trials))
@@ -318,6 +323,7 @@ def run_auto_ml(cfg, args):
 
 
 def auto_ml_experiment_exists(cfg, args):
+    print("Calling auto_ml_experiment_exists ... ")
     """Boolean utility to check if automl results already exists.
 
     Args:

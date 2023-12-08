@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/azeez/Documents/TorchAL')
+
 import argparse
 
 parser = argparse.ArgumentParser(description="Arguments for auto ml experiments")

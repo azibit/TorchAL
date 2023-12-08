@@ -184,12 +184,13 @@ def SWA_subprocess_call(argList, debug=False):
 
 
 def auto_ml_sp(cfg, args, debug=False):
+    print("Calling auto_ml_sp ...")
     """Utility function which runs AutoML hyper-parameter tuning as python subprocess.
 
     Args:
         cfg: Reference to config yaml.
         args: Reference to the input args.
-        debug (bool, optional): Switch for debubg mode. Defaults to True.
+        debug (bool, optional): Switch for debug mode. Defaults to True.
     """
     tempArgsFile = NamedTemporaryFile(
         suffix=".pkl", prefix="auto_ml_sp_", delete=True
@@ -215,6 +216,7 @@ def auto_ml_sp(cfg, args, debug=False):
 
 
 def swa_on_auto_ml_sp(cfg, args, debug=False):
+    print("Calling swa_on_auto_ml_sp ... ")
     """Utility function which runs SWA post-training on models saved during AutoML trials.
     This is implemented as a python subprocess.
 

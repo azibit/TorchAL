@@ -501,6 +501,7 @@ def assert_cfg():
 
 
 def custom_assert_cfg(temp_cfg):
+    print("Calling custom_assert_cfg ...")
     """Checks config values invariants."""
     assert (
         not temp_cfg.OPTIM.STEPS or temp_cfg.OPTIM.STEPS[0] == 0
@@ -542,6 +543,7 @@ def custom_assert_cfg(temp_cfg):
 
 
 def custom_dump_cfg(temp_cfg):
+    print("Calling custom_dump_cfg ... ")
     """Dumps the config to the output directory."""
     print("===========In custom dum cfg===========")
     print(
@@ -550,6 +552,8 @@ def custom_dump_cfg(temp_cfg):
     print("=======================================")
     os.makedirs(temp_cfg.OUT_DIR, exist_ok=True)
     cfg_file = os.path.join(temp_cfg.OUT_DIR, temp_cfg.CFG_DEST)
+
+    print(f"Prepare to dump {cfg_file} ")
     with open(cfg_file, "w") as f:
         # _C.dump(stream=f)
         temp_cfg.dump(stream=f)

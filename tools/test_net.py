@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/azeez/Documents/TorchAL')
+
 """Test a trained classification model."""
 
 import argparse
